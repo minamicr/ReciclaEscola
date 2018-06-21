@@ -11,21 +11,61 @@ export default class Escola extends Component {
     
     constructor(props) {
         super(props)
-        this.state = { nome: '', endereco: '', cidade: ''
+        this.state = { id: '', nome: '', endereco: '', cidade: ''
                 , estado: ''
                 , cep: '', telefone: '', email: '', list: []}
         this.handleChange = this.handleChange.bind(this)
-        this.handleAdd = this.handleAdd.bind(this)
+        this.handleAddUpdate = this.handleAddUpdate.bind(this)
+        this.handleRemove = this.handleRemove.bind(this)
+        this.handleSearch = this.handleSearch.bind(this)
+        this.handleEdit = this.handleEdit.bind(this)
+        this.handleCleanFields = this.handleCleanFields.bind(this)
 
         this.refresh()
     }
 
-    refresh() {
-        axios.get(`${URL}?sort=-createdAt`)
-            .then(resp => this.setState({...this.state, nome: '', list: resp.data}))
+    refresh(nome = '') {
+        const search = nome ? `&nome__regex=/${nome}/` : ''
+        axios.get(`${URL}?sort=-createdAt${search}`)
+            .then(resp => this.setState({...this.state
+                , nome, list: resp.data}))
     }
 
-    handleAdd() {
+    handleSearch() {
+        this.refresh(this.state.nome)
+    }
+
+    handleEdit(escola = '') {
+        const search = escola ? `?_id=${escola._id}` : ''
+        axios.get(`${URL}${search}`)
+            .then(resp => this.setState({...this.state
+                , id: escola._id
+                , nome: escola.nome
+                , endereco: escola.endereco
+                , cidade: escola.cidade
+                , estado: escola.estado
+                , cep: escola.cep
+                , telefone: escola.telefone
+                , email: escola.email
+                , list: resp.data}))
+
+    }
+
+    limparCampos() {
+        console.log('limpar campos')
+        this.setState({...this.state
+           ,  nome: ''
+            , endereco: ''
+            , cidade: ''
+            , estado: ''
+            , cep: ''
+            , telefone: ''
+            , email: ''
+            , list: []})
+    }
+
+    handleAddUpdate() {
+        const id = this.state.id
         const nome = this.state.nome
         const endereco = this.state.endereco
         const cidade = this.state.cidade
@@ -34,9 +74,11 @@ export default class Escola extends Component {
         const telefone = this.state.telefone
         const email = this.state.email
 
-        axios.post(URL, { nome, endereco, cidade, estado, cep
-                            , telefone, email })
-            .then(resp => this.refresh())
+        axios.put(`${URL}/${id}`, { nome, endereco, cidade, estado, cep
+                , telefone, email })
+                .then(resp => this.refresh())
+                .then(this.limparCampos())
+
     }
 
     handleChange(e) {
@@ -44,20 +86,38 @@ export default class Escola extends Component {
         this.setState(change)
     }
 
+    handleRemove(escola) {
+        axios.delete(`${URL}/${escola._id}`)
+            .then(resp => this.refresh())
+
+    }
+
+    handleCleanFields(){
+        this.limparCampos()
+    }
+
     render () {
         return (
             <div>
-                <PageHeader name='Escolas' small='Cadastro' />
-                <EscolaForm nome={this.state.nome}
+                <PageHeader name='Escolas' small='cadastro' />
+                <EscolaForm 
+                    id={this.state.id}
+                    nome={this.state.nome}
                     endereco={this.state.endereco}
                     cidade={this.state.cidade}
                     estado={this.state.estado}
                     cep={this.state.cep}
                     telefone={this.state.telefone}
                     email={this.state.email}
-                    handleAdd={this.handleAdd} 
-                    handleChange={this.handleChange} />
-                <EscolaLista />
+                    handleAddUpdate={this.handleAddUpdate} 
+                    handleChange={this.handleChange} 
+                    handleSearch={this.handleSearch}
+                    handleCleanFields={this.limparCampos}
+                     />
+                <EscolaLista list={this.state.list} 
+                    handleRemove={this.handleRemove} 
+                    handleEdit={this.handleEdit} 
+                    />
 
             </div>
         )
