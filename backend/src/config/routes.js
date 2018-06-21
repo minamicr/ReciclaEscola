@@ -8,4 +8,8 @@ module.exports = function(server) {
     //Escola routes
     const escolaService = require('../api/escola/escolaService')
     escolaService.register(router, '/escola')
+
+    //Negocio routes
+    const negocioService = require('../api/negocio/negocioService')
+    negocioService.register(router, '/negocio')
 }
