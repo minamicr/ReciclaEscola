@@ -51,19 +51,6 @@ export default class Escola extends Component {
 
     }
 
-    limparCampos() {
-        console.log('limpar campos')
-        this.setState({...this.state
-           ,  nome: ''
-            , endereco: ''
-            , cidade: ''
-            , estado: ''
-            , cep: ''
-            , telefone: ''
-            , email: ''
-            , list: []})
-    }
-
     handleAddUpdate() {
         const id = this.state.id
         const nome = this.state.nome
@@ -74,11 +61,17 @@ export default class Escola extends Component {
         const telefone = this.state.telefone
         const email = this.state.email
 
-        axios.put(`${URL}/${id}`, { nome, endereco, cidade, estado, cep
+        if (id){
+            axios.put(`${URL}/${id}`, { nome, endereco, cidade, estado, cep
                 , telefone, email })
                 .then(resp => this.refresh())
-                .then(this.limparCampos())
-
+                .then(this.handleCleanFields())
+        } else {
+            axios.post(`${URL}`, { nome, endereco, cidade, estado
+                , cep, telefone, email })
+                .then(resp => this.refresh())
+                .then(this.handleCleanFields())
+        }
     }
 
     handleChange(e) {
@@ -93,7 +86,17 @@ export default class Escola extends Component {
     }
 
     handleCleanFields(){
-        this.limparCampos()
+        this.setState({...this.state
+            , id: ''
+            , nome: ''
+            , endereco: ''
+            , cidade: ''
+            , estado: ''
+            , cep: ''
+            , telefone: ''
+            , email: ''
+            , list: []}) 
+        this.refresh()
     }
 
     render () {
@@ -112,7 +115,7 @@ export default class Escola extends Component {
                     handleAddUpdate={this.handleAddUpdate} 
                     handleChange={this.handleChange} 
                     handleSearch={this.handleSearch}
-                    handleCleanFields={this.limparCampos}
+                    handleCleanFields={this.handleCleanFields}
                      />
                 <EscolaLista list={this.state.list} 
                     handleRemove={this.handleRemove} 

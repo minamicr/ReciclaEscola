@@ -27,7 +27,8 @@ export default props => (
                     <div className="input-group-append">
                         <IconButton 
                             style='info' icon='search'
-                            className="form-control" >
+                            className="form-control" 
+                            onClick={props.handleSearch}>
                         </IconButton>
                     </div>
 
@@ -90,7 +91,7 @@ export default props => (
             <div className="form-row">
                 <div className="col-12 d-flex justify-content-end">
                     <button type="submit" className="btn btn-primary" 
-                        onClick={props.handleAddUpdate}>Incluir</button>
+                        onClick={props.handleAddUpdate}>Incluir / Atualizar</button>
                     <button type="reset" className="btn btn-secondary ml-2"
                         onClick={props.handleCleanFields}>Cancelar</button>
                 </div>
