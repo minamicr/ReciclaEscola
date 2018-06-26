@@ -7,14 +7,24 @@ export default props => (
             </a>
 
             <div id="navbar" className="navbar-collapse collapse">
-                <ul className="navbar-nav">
-                    <li className="nav-item"><a className="nav-link" href="#/categoria">ADM - Categoria / SubCategoria</a></li>
-                    <li className="nav-item"><a className="nav-link" href="#/escola">ADM - Escola</a></li>
-                    <li className="nav-item"><a className="nav-link"href="#/teste">ADM - Usuário</a></li>
-                    <li className="nav-item"><a className="nav-link"href="#/negocio">ADM - Negócio</a></li>
-                    <li className="nav-item"><a className="nav-link"href="#/escola">Produtos</a></li>
-                    <li className="nav-item"><a className="nav-link"href="#/escola">Meus Negócios</a></li>
-                    <li className="nav-item"><a className="nav-link"href="#/sobre">Sobre</a></li>
+                <ul className="navbar-nav mr-auto">
+                    <li className="nav-item dropdown">
+                        <a className="nav-link dropdown-toggle" id="navbarDropdown" 
+                            role="button" data-toggle="dropdown" 
+                            aria-haspopup="true" aria-expanded="false">
+                            Administração
+                        </a>
+                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a className="dropdown-item" href="#/categoria">Categoria / SubCategoria</a>
+                            <a className="dropdown-item" href="#/teste">Usuário</a>
+                            <div className="dropdown-divider"></div>
+                            <a className="dropdown-item" href="#/negocio">Negócio</a>
+                        </div>
+                    </li>   
+                    <li className="nav-item"><a className="nav-link" href="#/escola">Escolas</a></li>
+                    <li className="nav-item"><a className="nav-link" href="#/produtos">Produtos</a></li>
+                    <li className="nav-item"><a className="nav-link" href="#/negocios">Meus Negócios</a></li>
+                    <li className="nav-item"><a className="nav-link" href="#/sobre">Sobre</a></li>
                 </ul>
             </div>
     </nav>
